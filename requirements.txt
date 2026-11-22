@@ -1,0 +1,12 @@
+# Core dependencies (pure Python / Termux ARM64 safe)
+httpx>=0.27.0
+tomli>=2.0.1; python_version < "3.11"
+
+# Development & testing
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+
+# Optional audio / local ML dependencies (install & verify individually on Termux ARM64)
+# numpy>=1.26.0          # In Termux, prefer: pkg install python-numpy
+# vosk>=0.3.45           # Verify ARM64 Bionic wheel compatibility on Xperia
+# openwakeword>=0.6.0    # Requires onnxruntime or tflite-runtime on Termux ARM64

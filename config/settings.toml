@@ -1,0 +1,99 @@
+# ZIA Configuration
+# Do NOT put API keys in this file.
+# Set GROQ_API_KEY and GEMINI_API_KEY in environment variables or ~/.config/zia/secrets.env
+
+[assistant]
+name = "ZIA"
+timezone = "America/New_York"
+personality_file = "config/personality.md"
+personality_mode = "normal"
+offline_mode = false
+
+[proactive]
+enabled = true
+quiet_hours_start = "23:00"
+quiet_hours_end = "07:30"
+min_interval_minutes = 120
+max_per_day = 4
+
+[database]
+path = "data/zia.db"
+backup_dir = "data/backups"
+
+[llm]
+primary_provider = "groq"
+fallback_provider = "gemini"
+request_timeout_seconds = 25.0
+max_retries = 3
+retry_base_delay_seconds = 1.0
+temperature = 0.6
+max_tokens = 512
+stream_responses = true
+
+[llm.groq]
+base_url = "https://api.groq.com/openai/v1"
+model = "qwen/qwen3.8-27b"
+fast_model = "llama-3.1-8b-instant"
+daily_request_limit = 900
+daily_token_limit = 450000
+
+[llm.gemini]
+base_url = "https://generativelanguage.googleapis.com/v1beta"
+model = "gemini-3.8-flash"
+fast_model = "gemini-3.8-flash"
+daily_request_limit = 900
+daily_token_limit = 450000
+
+[memory]
+short_term_turns = 8
+max_retrieved_memories = 8
+max_context_chars = 3500
+summary_trigger_messages = 24
+duplicate_similarity_threshold = 0.85
+
+[audio]
+# Primary streaming backend: "pulseaudio" (parec + module-sles-source) or "termux_record" (half-duplex fallback)
+mic_backend = "pulseaudio"
+sample_rate = 16000
+channels = 1
+frame_duration_ms = 80
+# Calibrated for normal indoor speaking volume (no shouting required)
+vad_energy_threshold = 260.0
+silence_timeout_seconds = 1.8
+max_record_seconds = 18.0
+followup_timeout_seconds = 6.0
+echo_cooldown_ms = 400
+# TTS backend: "kokoro", "termux_tts", "espeak", or "null"
+tts_backend = "kokoro"
+tts_stream = "MUSIC"
+tts_rate = 1.0
+tts_pitch = 1.0
+# Kokoro-82M ONNX settings (young/expressive voices: af_sky, af_bella, af_sarah, af_heart)
+kokoro_model = "models/kokoro-v1.0.onnx"
+kokoro_voices = "models/voices-v1.0.bin"
+kokoro_voice = "af_sky"
+# STT backend: "whisper_cpp", "vosk", or "none"
+stt_backend = "whisper_cpp"
+whisper_bin = "whisper-cli"
+# base.en handles Indian English cadence much better than tiny.en on Snapdragon 888
+whisper_model = "models/ggml-base.en.bin"
+whisper_prompt = "Natural Indian English conversation with Zia."
+# For Vosk, prefer the Indian English model: vosk-model-small-en-in-0.4
+vosk_model_dir = "models/vosk-model-small-en-in-0.4"
+# Wake word backend: "openwakeword", "vosk_keyword", or "manual"
+wakeword_backend = "manual"
+wakeword_phrase = "hey zia"
+wakeword_threshold = 0.45
+
+[scheduler]
+poll_interval_seconds = 15
+morning_summary_time = "08:00"
+evening_summary_time = "21:00"
+
+[system]
+log_dir = "data/logs"
+log_level = "INFO"
+pid_file = "data/zia.pid"
+watchdog_interval_seconds = 30
+battery_low_percent = 15
+thermal_warn_celsius = 45.0
